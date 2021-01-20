@@ -1,0 +1,65 @@
+[
+  {
+    "name": "Apple",
+    "iconName": "UI/Icons/Items/Apple_B.png",
+    "prefabName": "Prefabs/Items/Apple",
+    "type": 1,
+    "mass": 5
+  },
+  {
+    "name": "Baterry",
+    "iconName": "UI/Icons/Items/Baterry_B.png",
+    "prefabName": "Prefabs/Items/Baterry",
+    "type": 2,
+    "mass": 10
+  },
+  {
+    "name": "Bottle",
+    "iconName": "UI/Icons/Items/Bottle_B.png",
+    "prefabName": "Prefabs/Items/Bottle",
+    "type": 3,
+    "mass": 15
+  },
+  {
+    "name": "Flashlight",
+    "iconName": "UI/Icons/Items/Flashlight_B.png",
+    "prefabName": "Prefabs/Items/Flashlight",
+    "type": 4,
+    "mass": 11
+  },
+  {
+    "name": "Lighter",
+    "iconName": "UI/Icons/Items/Lighter_B.png",
+    "prefabName": "Prefabs/Items/Lighter",
+    "type": 5,
+    "mass": 2
+  },
+  {
+    "name": "Rope",
+    "iconName": "UI/Icons/Items/Rope_B.png",
+    "prefabName": "Prefabs/Items/rope",
+    "type": 6,
+    "mass": 5
+  },
+  {
+    "name": "Signal Rocket",
+    "iconName": "UI/Icons/Items/Signal_Rocket_B.png",
+    "prefabName": "Prefabs/Items/Signal_Rocket",
+    "type": 7,
+    "mass": 3
+  },  
+  {
+    "name": "Knife",
+    "iconName": "UI/Icons/Items/Knife_B.png",
+    "prefabName": "Items/Knife.prefab",
+    "type": 8,
+    "mass": 2
+  },
+  {
+    "name": "Crate",
+    "iconName": "Crate/Crate.png",
+    "prefabName": "Prefabs/Crate/Crate",
+    "type": 0,
+    "mass": 100	
+  }
+]
