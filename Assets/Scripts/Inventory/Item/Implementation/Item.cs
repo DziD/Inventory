@@ -1,13 +1,4 @@
-﻿public interface IItem
-{
-    int id { get; }
-    string name { get; }
-    float mass { get; }
-    int type { get; }
-
-    string iconName { get; }
-    string prefabName { get; }
-}
+﻿using UnityEngine;
 
 public class Item: IItem
 {
@@ -44,5 +35,15 @@ public class Item: IItem
     public string prefabName
     {
         get { return desc.prefabName; }
+    }
+
+    public Vector3 UIPosition
+    {
+        get { return desc.uiPosition; }
+    }
+
+    public Vector3 LinkedPosition
+    {
+        get { return desc.linkedPosition; }
     }
 }

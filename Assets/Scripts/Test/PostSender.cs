@@ -13,7 +13,6 @@ public class EventData
 }
 public class PostSender : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
         List<ItemDesc> itemDesc = new List<ItemDesc>();
@@ -26,7 +25,9 @@ public class PostSender : MonoBehaviour
                 mass = 2.0f,
                 name = "namesss",
                 prefabName = "gameObject.nanan",
-                type = 2
+                type = 2,
+                linkedPosition = Vector3.one,
+                uiPosition = Vector3.zero
             });
         }
 
@@ -35,7 +36,6 @@ public class PostSender : MonoBehaviour
         File.WriteAllText(@"C:\Work\result.txt", someText);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Space))

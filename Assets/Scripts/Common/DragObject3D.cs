@@ -13,19 +13,32 @@ public class DragObject3D : MonoBehaviour
     [SerializeField]
     private MeshCollider meshCollider;
 
-    public IItem item = null;
+    public IItem item { get; private set; }
 
     Plane floorPlane;
 
+    private bool isInteractive = true;
+
+    public void EnableIntercative(bool isInteractive)
+    {
+        this.isInteractive = isInteractive;
+    }
+
+    public void Initialize(IItem item)
+    {
+        this.item = item;
+        rigidBody.mass = item.mass;
+    }
+
     private void Start()
     {
-        if(rigidBody == null)
+        if (rigidBody == null)
         {
             Debug.LogWarningFormat("Please assign Rigidbody for {0}", gameObject.name);
             rigidBody = GetComponent<Rigidbody>();
-        }        
+        }
 
-        if(meshCollider == null)
+        if (meshCollider == null)
         {
             Debug.LogWarningFormat("Please assign MeshCollider for {0}", gameObject.name);
             meshCollider = GetComponent<MeshCollider>();
@@ -37,6 +50,11 @@ public class DragObject3D : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (!isInteractive)
+        {
+            return;
+        }
+
         zCoord = Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
         rigidBody.isKinematic = true;
         meshCollider.isTrigger = true;
@@ -45,16 +63,26 @@ public class DragObject3D : MonoBehaviour
 
     private void OnMouseUp()
     {
+        if (!isInteractive)
+        {
+            return;
+        }
+
         meshCollider.isTrigger = false;
         rigidBody.isKinematic = false;
     }
     private void OnMouseDrag()
-    {        
+    {
+        if (!isInteractive)
+        {
+            return;
+        }
+
         Vector3 newPos = GetMouseWorldPos(zCoord) + offset;
 
         if (newPos.y < 0.2f)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);            
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (floorPlane.Raycast(ray, out float distanceOnRay))
             {
                 newPos = ray.GetPoint(distanceOnRay - 0.1f);
@@ -62,13 +90,8 @@ public class DragObject3D : MonoBehaviour
         }
 
         transform.position = newPos;
-    }
-
-    private void OnTriggerEnter(Collision collision)
-    {
-        Debug.LogWarning(collision.gameObject.name);
-    }
-
+    }   
+    
     private Vector3 GetMouseWorldPos(float zCoord)
     {
         Vector3 mousePosition = Input.mousePosition;

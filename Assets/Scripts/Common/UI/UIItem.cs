@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class UIItem : MonoBehaviour
 {
@@ -10,7 +8,9 @@ public class UIItem : MonoBehaviour
     private CanvasGroup canvasGroup = null;
 
     [HideInInspector]
-    public PickUpDrop selectedItem = null;
+    public PickUpDrop itemUnderCursor = null;
+
+    public IItem item; 
 
     private void Start()
     {
@@ -28,9 +28,9 @@ public class UIItem : MonoBehaviour
         canvasGroup.alpha = 0.0f;
     }
 
-    public bool SelectItem(Vector3 mousePosition)
+    public bool CheckItemUnderMouse(Vector3 mousePosition)
     {
-        selectedItem = null;
+        itemUnderCursor = null;
 
         for (int i = 0; i < Items.Length; i++)
         {
@@ -39,31 +39,20 @@ public class UIItem : MonoBehaviour
 
             if (parallelogram.Contains(mousePosition))
             {
-                selectedItem = Items[i];
+                itemUnderCursor = Items[i];
                 Items[i].image.color = Color.red;
             }
         }
 
-        return selectedItem != null;
+        return itemUnderCursor != null;
     }
 
-    private void OnGUI()
-    {
-        for (int i = 0; i < Items.Length; i++)
-        {
-            //Items[i].image.color = Color.white;
-            var parallelogram = UIUtils.GetScreenParallelogramFromRect(Items[i].RectTransform, Camera.main);
-
-            Parallelogram.DrawParallelogram(parallelogram);
-        }
-    }
-
-    public void SpawnSelectedItem()
-    {
-
-    }
-
-    public void ChangeAlpha()
-    {
-    }      
+    //private void OnGUI()
+    //{
+    //    for (int i = 0; i < Items.Length; i++)
+    //    {            
+    //        var parallelogram = UIUtils.GetScreenParallelogramFromRect(Items[i].RectTransform, Camera.main);
+    //        Parallelogram.DrawParallelogram(parallelogram);
+    //    }
+    //}
 }
