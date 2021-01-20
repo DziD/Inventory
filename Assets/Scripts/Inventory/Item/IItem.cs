@@ -8,7 +8,6 @@ public interface IItem
     int type { get; }
     Vector3 UIPosition { get; }
     Vector3 LinkedPosition { get; }
-
     string iconName { get; }
     string prefabName { get; }
 }

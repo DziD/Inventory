@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -6,25 +7,18 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(Collider))]
 public class BagRepresentation : MonoBehaviour
 {
-    private struct AllInOne
-    {
-        public UIItem uiItem;
-        public IItem item;
-        public GameObject itemGo;
-    }
-
-    private List<UIItem> uiItems = new List<UIItem>();
-
-    private readonly Dictionary<IItem, AllInOne> allInOne = new Dictionary<IItem, AllInOne>();
-
-    private Dictionary<IItem, GameObject> gameObjects = new Dictionary<IItem, GameObject>();
-
     [SerializeField]
     private Transform uiParent;
+
+    [SerializeField]
+    private Transform itemsParent;
+
+    private readonly Dictionary<IItem, UIItem> uiItems = new Dictionary<IItem, UIItem>();
 
     public int StorageId = 0;
 
     public IInventoryStorage inventoryStorage = null;
+
     private void Start()
     {
         inventoryStorage = InventorySystem.GetStorage(StorageId);
@@ -39,70 +33,125 @@ public class BagRepresentation : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        var dragObject = other.gameObject.GetComponent<DragObject3D>();
+        var dragObject = other.gameObject.GetComponent<ItemView>();
         if (dragObject != null)
         {
-            //dragObject.gameObject.SetActive(false);
-            dragObject.EnableIntercative(false);
-            dragObject.transform.position = dragObject.item.LinkedPosition;
-            gameObjects.Add(dragObject.item, dragObject.gameObject);
             inventoryStorage.AddItem(dragObject.item);
         }
     }
     private void OnMouseDown()
     {
-        for (int i = 0; i < uiItems.Count; i++)
+        foreach (var pair in uiItems)
         {
-            uiItems[i].Show();
+            pair.Value.Show();
         }
     }
+
+    private readonly List<IItem> itemsForRemove = new List<IItem>();
     private void OnMouseUp()
     {
-        for (int i = uiItems.Count - 1; i >= 0; i--)
+        itemsForRemove.Clear();
+
+        foreach (var pair in uiItems)
         {
-            uiItems[i].Hide();
-            if (uiItems[i].itemUnderCursor != null)
+            var uiItem = pair.Value;
+            uiItem.Hide();
+
+            if(uiItem.itemUnderCursor != null)
             {
-                uiItems[i].gameObject.SetActive(false);
-                inventoryStorage.RemoveItem(uiItems[i].item);
-                uiItems.RemoveAt(i);
+                uiItem.gameObject.SetActive(false);
+                inventoryStorage.RemoveItem(pair.Key);
+                itemsForRemove.Add(pair.Key);
             }
+        }
+
+        for (int i = 0; i < itemsForRemove.Count; i++)
+        {
+            uiItems.Remove(itemsForRemove[i]);
         }
     }
     private void OnMouseDrag()
     {
-        for (int i = 0; i < uiItems.Count; i++)
+        foreach (var pair in uiItems)
         {
-            uiItems[i].CheckItemUnderMouse(Input.mousePosition);
+            pair.Value.CheckItemUnderCursor(Input.mousePosition);
         }
     }
 
     private void OnItemAdded(IItem item)
+    {        
+        var itemView = InventorySystem.GetViewForItem(item);
+
+        StartCoroutine(MoveObject(itemView,
+            itemView.item.LinkedPosition,
+            before: () =>
+            {
+                itemView.EnableIntercative(false);
+            },
+            after: () =>
+            {
+                itemView.transform.SetParent(itemsParent);
+            }));
+        
+        uiItems.Add(item, CreateUIItem(item));
+    }
+
+    private void OnItemRemoved(IItem item)
+    {
+        var itemView = InventorySystem.GetViewForItem(item);
+
+        StartCoroutine(MoveObject(itemView,
+            new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), 0.1f, UnityEngine.Random.Range(-0.35f, 0.4f)),
+            before: () =>
+            {
+                itemView.transform.SetParent(Environment.GetItemsRoot());
+            },
+            after: () =>
+            {
+                itemView.EnableIntercative(true);
+            }));
+    }
+
+    private UIItem CreateUIItem(IItem item)
     {
         var uiItemGO = ResourceManager.SpawnObject("Prefabs/UI/Items/UIItem");
-
-        uiItemGO.transform.parent = uiParent;
+        uiItemGO.transform.SetParent(uiParent, false);
         uiItemGO.transform.localPosition = item.UIPosition;
         uiItemGO.transform.rotation = Quaternion.Euler(18.0f, 0.0f, 0.0f);
 
         var uiItem = uiItemGO.GetComponent<UIItem>();
         uiItem.Items[0].image.sprite = ResourceManager.GetSprite(item.iconName);
-        //uiItem.Items[0].image.sprite = Resources.Load<Sprite>(item.iconName);
         uiItem.item = item;
-        uiItems.Add(uiItem);
 
-        allInOne.Add(item, new AllInOne()
-        {
-            item = item,
-            itemGo = gameObjects[item],
-            uiItem = uiItem
-        });
+        return uiItem;
     }
 
-    private void OnItemRemoved(IItem item)
+    private IEnumerator MoveObject(ItemView sourceObject, Vector3 targetPosition, Action before = null, Action after = null)
     {
-        gameObjects[item].GetComponent<DragObject3D>().EnableIntercative(true);
-        allInOne.Remove(item);
-        gameObjects.Remove(item);
+        if (before != null)
+        {
+            before();
+        }
+
+        float t = 0.0f;
+        float moveDuration = 0.2f;
+        Vector3 start = sourceObject.transform.position;
+        Vector3 end = targetPosition;
+
+        while (t < moveDuration)
+        {
+            t += Time.deltaTime;
+            sourceObject.transform.position = Vector3.Lerp(start, end, t / moveDuration);
+
+            yield return null;
+        }
+
+        sourceObject.transform.position = targetPosition;
+
+        if (after != null)
+        {
+            after();
+        }
     }
+
 }

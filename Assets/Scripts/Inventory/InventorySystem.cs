@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,21 +8,13 @@ public class InventorySystem : MonoBehaviour
     public UnityEvent<int, IItem> onItemRemovedFromStorage;
 
     private static InventorySystem instance;
+    private readonly Dictionary<IItem, ItemView> itemsOnScene = new Dictionary<IItem, ItemView>();
+    private readonly Dictionary<int, InventoryStorage> _inventoryStorageList = new Dictionary<int, InventoryStorage>();
 
-    public static readonly Dictionary<int, ItemDesc> itemsDataBase = new Dictionary<int, ItemDesc>();
-
-    private Dictionary<int, InventoryStorage> _inventoryStorageList = new Dictionary<int, InventoryStorage>();
     private void Awake()
     {
         instance = this;
         DontDestroyOnLoad(this);
-
-        TextAsset itemsDB = Resources.Load("ItemsDB") as TextAsset;
-        var items = JsonConvert.DeserializeObject<List<ItemDesc>>(itemsDB.text);
-        for (int i = 0; i < items.Count; i++)
-        {
-            itemsDataBase.Add(items[i].type, items[i]);
-        }
     }
     public static bool AddStorage(int storageId)
     {
@@ -54,7 +45,6 @@ public class InventorySystem : MonoBehaviour
 
         return instance._inventoryStorageList[storageId];
     }
-
     public static bool RemoveStorage(int storageId)
     {
         if (instance == null)
@@ -69,17 +59,39 @@ public class InventorySystem : MonoBehaviour
 
         return true;
     }
-
     public static IItem CreateItem(ItemDesc desc)
     {
         return new Item(desc);
     }
+    public static ItemView GetViewForItem(IItem item)
+    {
+        if (instance != null)
+        {
+            if (instance.itemsOnScene.TryGetValue(item, out ItemView itemView))
+            {
+                return itemView;
+            }
+        }
 
+        return null;
+    }
     public static GameObject SpawnItem(IItem item, Vector3 position, Transform parent = null)
     {
+        if (instance == null)
+        {
+            return null;
+        }
+
         var itemGo = ResourceManager.SpawnObject(item.prefabName);
-        var dragObject3D = itemGo.GetComponent<DragObject3D>();
-        dragObject3D.Initialize(item);
+        var itemView = itemGo.GetComponent<ItemView>();
+        itemView.Initialize(item);
+
+        if(parent != null)
+        {
+            itemGo.transform.SetParent(parent);
+        }
+
+        instance.itemsOnScene.Add(item, itemView);
 
         return itemGo;
     }

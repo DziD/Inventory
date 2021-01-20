@@ -127,6 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiParent: {fileID: 3123845553269099648}
+  itemsParent: {fileID: 6721485848965953549}
   StorageId: 0
 --- !u!1 &4957491201966742359
 GameObject:

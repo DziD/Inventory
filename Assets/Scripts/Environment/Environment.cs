@@ -4,15 +4,47 @@ using UnityEngine;
 
 public class Environment : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private static Environment instance;
+
+    [SerializeField]
+    private Camera mainCamera = null;
+
+    [SerializeField]
+    private Transform itemsRoot = null;
+
+    [SerializeField]
+    private Transform cratesRoot = null;
+
+    private void Awake()
     {
-        
+        instance = this;
     }
 
-    // Update is called once per frame
-    void Update()
+    public static Camera GetCamera()
     {
-        
+        if (instance == null)
+        {
+            return null;
+        }
+
+        return instance.mainCamera;
+    }
+    public static Transform GetItemsRoot()
+    {
+        if (instance == null)
+        {
+            return null;
+        }
+
+        return instance.itemsRoot;
+    }
+    public static Transform GetCratesRoot()
+    {
+        if (instance == null)
+        {
+            return null;
+        }
+
+        return instance.cratesRoot;
     }
 }

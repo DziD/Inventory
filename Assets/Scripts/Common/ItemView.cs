@@ -3,31 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class DragObject3D : MonoBehaviour
+public class ItemView : MonoBehaviour
 {
-    private Vector3 offset;
-    private float zCoord;
-
     [SerializeField]
     private Rigidbody rigidBody;
     [SerializeField]
     private MeshCollider meshCollider;
-
     public IItem item { get; private set; }
 
-    Plane floorPlane;
+    private Plane floorPlane;
 
     private bool isInteractive = true;
 
-    public void EnableIntercative(bool isInteractive)
-    {
-        this.isInteractive = isInteractive;
-    }
+    private Camera mainCamera;
 
-    public void Initialize(IItem item)
+    private void Awake()
     {
-        this.item = item;
-        rigidBody.mass = item.mass;
+        mainCamera = Environment.GetCamera();
     }
 
     private void Start()
@@ -47,6 +39,21 @@ public class DragObject3D : MonoBehaviour
         floorPlane = new Plane();
         floorPlane.SetNormalAndPosition(Vector3.up, Vector3.zero);
     }
+    public void EnableIntercative(bool isInteractive)
+    {
+        meshCollider.enabled = isInteractive;
+        this.isInteractive = isInteractive;
+        rigidBody.isKinematic = !isInteractive;
+        meshCollider.isTrigger = !isInteractive;
+    }
+    public void Initialize(IItem item)
+    {
+        this.item = item;
+        rigidBody.mass = item.mass;
+    }
+
+    private Vector3 offset;
+    private float zCoord;
 
     private void OnMouseDown()
     {
@@ -55,10 +62,10 @@ public class DragObject3D : MonoBehaviour
             return;
         }
 
-        zCoord = Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
+        zCoord = mainCamera.WorldToScreenPoint(transform.position).z;
         rigidBody.isKinematic = true;
         meshCollider.isTrigger = true;
-        offset = gameObject.transform.position - GetMouseWorldPos(zCoord);
+        offset = transform.position - GetMouseWorldPos(zCoord);
     }
 
     private void OnMouseUp()
@@ -82,7 +89,7 @@ public class DragObject3D : MonoBehaviour
 
         if (newPos.y < 0.2f)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             if (floorPlane.Raycast(ray, out float distanceOnRay))
             {
                 newPos = ray.GetPoint(distanceOnRay - 0.1f);
@@ -98,6 +105,6 @@ public class DragObject3D : MonoBehaviour
         mousePosition.y = Input.mousePosition.y;
         mousePosition.z = zCoord;
 
-        return Camera.main.ScreenToWorldPoint(mousePosition);
+        return mainCamera.ScreenToWorldPoint(mousePosition);
     }
 }
