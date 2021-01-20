@@ -18,7 +18,7 @@ public class BagRepresentation : MonoBehaviour
 
     public int StorageId = 0;
 
-    public IInventoryStorage inventoryStorage = null;
+    public IInventoryStorage inventoryStorage { get; private set; }
 
     private void Start()
     {
