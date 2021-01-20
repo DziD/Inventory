@@ -1,65 +1,141 @@
 [
   {
     "name": "Apple",
-    "iconName": "UI/Icons/Items/Apple_B.png",
+    "iconName": "UI/Icons/Items/Apple_B",
     "prefabName": "Prefabs/Items/Apple",
     "type": 1,
-    "mass": 5
+    "mass": 5,
+    "uiPosition": {
+      "x": 0.41,
+      "y": 0.82,
+      "z": -0.128,
+    },
+
+    "linkedPosition": {
+      "x": 0.621,
+      "y": 0.548,
+      "z": 0.829,
+    }
   },
   {
     "name": "Baterry",
-    "iconName": "UI/Icons/Items/Baterry_B.png",
+    "iconName": "UI/Icons/Items/Baterry_B",
     "prefabName": "Prefabs/Items/Baterry",
     "type": 2,
-    "mass": 10
+    "mass": 10,
+    "uiPosition": {
+      "x": -0.07,
+      "y": 0.5,
+      "z": -0.26,
+    },
+
+    "linkedPosition": {
+      "x": 0.232,
+      "y": 0.149,
+      "z": 0.566,
+    }
   },
   {
     "name": "Bottle",
-    "iconName": "UI/Icons/Items/Bottle_B.png",
+    "iconName": "UI/Icons/Items/Bottle_B",
     "prefabName": "Prefabs/Items/Bottle",
     "type": 3,
-    "mass": 15
+    "mass": 15,
+    "uiPosition": {
+      "x": -0.03,
+      "y": 1.05,
+      "z": -0.128,
+    },
+    "linkedPosition": {
+      "x": 0.267,
+      "y": 0.635,
+      "z": 0.729
+    }
   },
   {
     "name": "Flashlight",
-    "iconName": "UI/Icons/Items/Flashlight_B.png",
+    "iconName": "UI/Icons/Items/Flashlight_B",
     "prefabName": "Prefabs/Items/Flashlight",
     "type": 4,
-    "mass": 11
+    "mass": 11,
+    "uiPosition": {
+      "x": 0.557,
+      "y": 0.579,
+      "z": 0.145,
+    },
+
+    "linkedPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
   },
   {
     "name": "Lighter",
-    "iconName": "UI/Icons/Items/Lighter_B.png",
+    "iconName": "UI/Icons/Items/Lighter_B",
     "prefabName": "Prefabs/Items/Lighter",
     "type": 5,
-    "mass": 2
+    "mass": 2,
+     "uiPosition": {
+      "x": 0.557,
+      "y": 0.579,
+      "z": 0.145,
+    },
+    "linkedPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
   },
   {
     "name": "Rope",
-    "iconName": "UI/Icons/Items/Rope_B.png",
+    "iconName": "UI/Icons/Items/Rope_B",
     "prefabName": "Prefabs/Items/rope",
     "type": 6,
-    "mass": 5
+    "mass": 5,
+    "uiPosition": {
+      "x": -0.559,
+      "y": 0.844,
+      "z": -0.128,
+    },
+    "linkedPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
   },
   {
     "name": "Signal Rocket",
-    "iconName": "UI/Icons/Items/Signal_Rocket_B.png",
+    "iconName": "UI/Icons/Items/Signal_Rocket_B",
     "prefabName": "Prefabs/Items/Signal_Rocket",
     "type": 7,
-    "mass": 3
+    "mass": 3,
+    "uiPosition": {
+      "x": -0.56,
+      "y": 0.609,
+      "z": -0.128,
+    },
+    "linkedPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
   },  
   {
     "name": "Knife",
-    "iconName": "UI/Icons/Items/Knife_B.png",
-    "prefabName": "Items/Knife.prefab",
+    "iconName": "UI/Icons/Items/Knife",
+    "prefabName": "Prefabs/Items/Knife",
     "type": 8,
-    "mass": 2
-  },
-  {
-    "name": "Crate",
-    "iconName": "Crate/Crate.png",
-    "prefabName": "Prefabs/Crate/Crate",
-    "type": 0,
-    "mass": 100	
+    "mass": 2,
+   "uiPosition": {
+      "x": -0.559,
+      "y": 0.844,
+      "z": -0.128,
+    },
+    "linkedPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
   }
 ]

@@ -125,4 +125,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rigidBody: {fileID: 5954628438588167968}
-  meshCollider: {fileID: 0}
+  meshCollider: {fileID: 3406713453458297738}
