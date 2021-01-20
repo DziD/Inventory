@@ -36,7 +36,7 @@ public class BagRepresentation : MonoBehaviour
         var dragObject = other.gameObject.GetComponent<ItemView>();
         if (dragObject != null)
         {
-            inventoryStorage.AddItem(dragObject.item);
+            inventoryStorage.AddItem(dragObject.Item);
         }
     }
     private void OnMouseDown()
@@ -85,7 +85,7 @@ public class BagRepresentation : MonoBehaviour
         var itemView = InventorySystem.GetViewForItem(item);
 
         StartCoroutine(MoveObject(itemView,
-            itemView.item.LinkedPosition,
+            itemView.Item.LinkedPosition,
             before: () =>
             {
                 itemView.EnableIntercative(false);

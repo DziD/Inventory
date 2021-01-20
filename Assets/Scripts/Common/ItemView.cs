@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 public class ItemView : MonoBehaviour
@@ -9,12 +7,10 @@ public class ItemView : MonoBehaviour
     private Rigidbody rigidBody;
     [SerializeField]
     private MeshCollider meshCollider;
-    public IItem item { get; private set; }
+    public IItem Item { get; private set; }
 
     private Plane floorPlane;
-
     private bool isInteractive = true;
-
     private Camera mainCamera;
 
     private void Awake()
@@ -48,7 +44,7 @@ public class ItemView : MonoBehaviour
     }
     public void Initialize(IItem item)
     {
-        this.item = item;
+        this.Item = item;
         rigidBody.mass = item.mass;
     }
 
