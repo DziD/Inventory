@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1284090879808661621}
   - component: {fileID: 1284090879808661620}
   m_Layer: 5
-  m_Name: UIItem
+  m_Name: UIItemPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -38,7 +38,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 36.442, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.5, y: 0.89}
+  m_AnchoredPosition: {x: 0.5, y: 0.89001465}
   m_SizeDelta: {x: 185, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1284090879808661619
@@ -125,10 +125,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fe242dc7fbb60c43accb00e916564b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Items:
-  - {fileID: 1284090881330621441}
+  Item: {fileID: 1284090881330621441}
   canvasGroup: {fileID: 1284090879808661621}
-  selectedItem: {fileID: 0}
+  itemUnderCursor: {fileID: 0}
 --- !u!1 &1284090880414164097
 GameObject:
   m_ObjectHideFlags: 0
@@ -366,6 +365,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01679973d1dbf0b4ab39172bdbdd93af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridID: 0
   RectTransform: {fileID: 1284090881330621500}
   image: {fileID: 1284090881060236048}

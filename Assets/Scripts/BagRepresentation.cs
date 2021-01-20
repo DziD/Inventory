@@ -7,13 +7,14 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(Collider))]
 public class BagRepresentation : MonoBehaviour
 {
+    private const string PATH_TO_UI_PANEL_PREFAB = "Prefabs/UI/Items/UIItemPanel";
     [SerializeField]
     private Transform uiParent;
 
     [SerializeField]
     private Transform itemsParent;
 
-    private readonly Dictionary<IItem, UIItem> uiItems = new Dictionary<IItem, UIItem>();
+    private readonly Dictionary<IItem, UIItemPanel> uiItems = new Dictionary<IItem, UIItemPanel>();
 
     public int StorageId = 0;
 
@@ -67,7 +68,9 @@ public class BagRepresentation : MonoBehaviour
 
         for (int i = 0; i < itemsForRemove.Count; i++)
         {
-            uiItems.Remove(itemsForRemove[i]);
+            var item = uiItems[itemsForRemove[i]];
+            ResourceManager.DespawnObject(item.gameObject, PATH_TO_UI_PANEL_PREFAB);
+            uiItems.Remove(itemsForRemove[i]);            
         }
     }
     private void OnMouseDrag()
@@ -112,15 +115,16 @@ public class BagRepresentation : MonoBehaviour
             }));
     }
 
-    private UIItem CreateUIItem(IItem item)
+    private UIItemPanel CreateUIItem(IItem item)
     {
-        var uiItemGO = ResourceManager.SpawnObject("Prefabs/UI/Items/UIItem");
-        uiItemGO.transform.SetParent(uiParent, false);
-        uiItemGO.transform.localPosition = item.UIPosition;
-        uiItemGO.transform.rotation = Quaternion.Euler(18.0f, 0.0f, 0.0f);
+        var uiItemGo = ResourceManager.SpawnObject(PATH_TO_UI_PANEL_PREFAB);
 
-        var uiItem = uiItemGO.GetComponent<UIItem>();
-        uiItem.Items[0].image.sprite = ResourceManager.GetSprite(item.iconName);
+        uiItemGo.transform.SetParent(uiParent, false);
+        uiItemGo.transform.localPosition = item.UIPosition;
+        uiItemGo.transform.rotation = Quaternion.Euler(18.0f, 0.0f, 0.0f);
+
+        var uiItem = uiItemGo.GetComponent<UIItemPanel>();
+        uiItem.Item.image.sprite = ResourceManager.GetSprite(item.iconName);
         uiItem.item = item;
 
         return uiItem;

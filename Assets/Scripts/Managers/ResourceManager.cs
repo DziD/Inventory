@@ -11,6 +11,8 @@ public class ResourceManager : MonoBehaviour
 
     public static readonly Dictionary<int, ItemDesc> ItemsDataBase = new Dictionary<int, ItemDesc>();
 
+    private readonly Dictionary<string, List<GameObject>> poolObjects = new Dictionary<string, List<GameObject>>();
+
     private void Awake()
     {
         instance = this;
@@ -32,6 +34,15 @@ public class ResourceManager : MonoBehaviour
         if (instance == null)
         {
             return null;
+        }        
+
+        if (instance.poolObjects.ContainsKey(path) && instance.poolObjects[path].Count > 0)
+        {
+            GameObject objectFromPool = instance.poolObjects[path][0];
+            objectFromPool.SetActive(true);
+            instance.poolObjects[path].RemoveAt(0);
+
+            return objectFromPool;
         }
 
         if (instance.prefabs.TryGetValue(path, out GameObject prefab))
@@ -64,5 +75,27 @@ public class ResourceManager : MonoBehaviour
         }
 
         return requestedSprite;
+    }
+
+    public static void DespawnObject(GameObject objectToDespawn, string pathToprefab = "")
+    {
+        if (instance == null)
+        {
+            return;
+        }
+
+        if(string.IsNullOrEmpty(pathToprefab))
+        {
+            Destroy(objectToDespawn);
+        }
+
+        if(!instance.poolObjects.ContainsKey(pathToprefab))
+        {
+            instance.poolObjects.Add(pathToprefab, new List<GameObject>());
+        }
+
+        objectToDespawn.transform.SetParent(instance.transform);
+        objectToDespawn.SetActive(false);
+        instance.poolObjects[pathToprefab].Add(objectToDespawn);
     }
 }
