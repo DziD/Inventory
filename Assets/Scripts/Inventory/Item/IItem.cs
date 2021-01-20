@@ -2,12 +2,15 @@
 
 public interface IItem
 {
-    int id { get; }
-    string name { get; }
+    int Id { get; }
+    int StorageId { get; }
+    string Name { get; }
     float mass { get; }
-    int type { get; }
+    int Type { get; }
     Vector3 UIPosition { get; }
     Vector3 LinkedPosition { get; }
-    string iconName { get; }
-    string prefabName { get; }
+    string IconName { get; }
+    string PrefabName { get; }
+
+    void SetStorageId(int storageId);
 }

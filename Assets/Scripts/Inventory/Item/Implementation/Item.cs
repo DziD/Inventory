@@ -1,18 +1,20 @@
 ﻿using UnityEngine;
 
 public class Item: IItem
-{
-    public static int ID = 0;
+{    
     public Item(ItemDesc desc)
     {
-        id = ++ID;
+        Id = InventorySystem.GetID();
+        StorageId = -1;
         this.desc = desc;
     }
 
     private ItemDesc desc;
 
-    public int id { get; private set; }
-    public string name 
+    public int Id { get; private set; }
+
+    public int StorageId { get; private set; }
+    public string Name 
     { 
         get { return desc.name; }
     }
@@ -22,17 +24,17 @@ public class Item: IItem
         get { return desc.mass; }
     }
 
-    public int type
+    public int Type
     {
         get { return desc.type; }
     }
 
-    public string iconName
+    public string IconName
     {
         get { return desc.iconName; }
     }
 
-    public string prefabName
+    public string PrefabName
     {
         get { return desc.prefabName; }
     }
@@ -45,5 +47,10 @@ public class Item: IItem
     public Vector3 LinkedPosition
     {
         get { return desc.linkedPosition; }
+    }
+
+    public void SetStorageId(int storageId)
+    {
+        this.StorageId = storageId;
     }
 }

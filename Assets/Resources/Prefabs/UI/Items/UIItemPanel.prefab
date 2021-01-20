@@ -125,9 +125,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fe242dc7fbb60c43accb00e916564b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Item: {fileID: 1284090881330621441}
-  canvasGroup: {fileID: 1284090879808661621}
   itemUnderCursor: {fileID: 0}
+  uiItem: {fileID: 1284090881330621441}
+  canvasGroup: {fileID: 1284090879808661621}
 --- !u!1 &1284090880414164097
 GameObject:
   m_ObjectHideFlags: 0

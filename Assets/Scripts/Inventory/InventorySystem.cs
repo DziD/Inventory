@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class InventorySystem : MonoBehaviour
 {
-    public UnityEvent<int, IItem> onItemAddedToStorage;
-    public UnityEvent<int, IItem> onItemRemovedFromStorage;
+    public static Action<int> onAddedStorage;
+    public static Action<int> onRemovedStorage;
 
     private static InventorySystem instance;
     private readonly Dictionary<IItem, ItemView> itemsOnScene = new Dictionary<IItem, ItemView>();
-    private readonly Dictionary<int, InventoryStorage> _inventoryStorageList = new Dictionary<int, InventoryStorage>();
+    private readonly Dictionary<int, InventoryStorage> _inventoryStorageDict = new Dictionary<int, InventoryStorage>();
 
     private void Awake()
     {
@@ -23,8 +24,13 @@ public class InventorySystem : MonoBehaviour
             return false;
         }
 
-        instance._inventoryStorageList.Add(storageId, new InventoryStorage(storageId));
+        var inventoryStorage = new InventoryStorage(storageId);
 
+        instance._inventoryStorageDict.Add(storageId, new InventoryStorage(storageId));
+        if(onAddedStorage != null)
+        {
+            onAddedStorage(storageId);
+        }
         return true;
     }
     public static IInventoryStorage GetStorage(int storageId)
@@ -34,16 +40,26 @@ public class InventorySystem : MonoBehaviour
             return null;
         }
 
-        if (instance._inventoryStorageList.TryGetValue(storageId, out InventoryStorage storage))
+        if (instance._inventoryStorageDict.TryGetValue(storageId, out InventoryStorage storage))
         {
             return storage;
         }
         else
         {
-            AddStorage(storageId);
+            AddStorage(storageId);            
         }
 
-        return instance._inventoryStorageList[storageId];
+        return instance._inventoryStorageDict[storageId];
+    }
+
+    public static List<IInventoryStorage> GetAllStorages()
+    {
+        if (instance == null)
+        {
+            return null;
+        }
+
+        return new List<IInventoryStorage>(instance._inventoryStorageDict.Values);
     }
     public static bool RemoveStorage(int storageId)
     {
@@ -52,9 +68,14 @@ public class InventorySystem : MonoBehaviour
             return false;
         }
 
-        if (instance._inventoryStorageList.ContainsKey(storageId))
+        if (instance._inventoryStorageDict.TryGetValue(storageId, out InventoryStorage inventoryStorage))
         {
-            instance._inventoryStorageList.Remove(storageId);
+            if (onRemovedStorage != null)
+            {
+                onRemovedStorage(storageId);
+            }
+
+            instance._inventoryStorageDict.Remove(storageId);            
         }
 
         return true;
@@ -82,7 +103,7 @@ public class InventorySystem : MonoBehaviour
             return null;
         }
 
-        var itemGo = ResourceManager.SpawnObject(item.prefabName);
+        var itemGo = ResourceManager.SpawnObject(item.PrefabName);
         var itemView = itemGo.GetComponent<ItemView>();
         itemView.Initialize(item);
 
@@ -94,5 +115,11 @@ public class InventorySystem : MonoBehaviour
         instance.itemsOnScene.Add(item, itemView);
 
         return itemGo;
+    }
+
+    private static int id = 0;
+    public static int GetID()
+    {
+        return ++id;
     }
 }

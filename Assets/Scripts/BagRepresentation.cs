@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Collider))]
 public class BagRepresentation : MonoBehaviour
@@ -58,7 +57,7 @@ public class BagRepresentation : MonoBehaviour
             var uiItem = pair.Value;
             uiItem.Hide();
 
-            if(uiItem.itemUnderCursor != null)
+            if(uiItem.ItemUnderCursor != null)
             {
                 uiItem.gameObject.SetActive(false);
                 inventoryStorage.RemoveItem(pair.Key);
@@ -90,10 +89,11 @@ public class BagRepresentation : MonoBehaviour
             before: () =>
             {
                 itemView.EnableIntercative(false);
+                itemView.transform.SetParent(itemsParent);
             },
             after: () =>
             {
-                itemView.transform.SetParent(itemsParent);
+                
             }));
         
         uiItems.Add(item, CreateUIItem(item));
@@ -121,16 +121,15 @@ public class BagRepresentation : MonoBehaviour
 
         uiItemGo.transform.SetParent(uiParent, false);
         uiItemGo.transform.localPosition = item.UIPosition;
-        uiItemGo.transform.rotation = Quaternion.Euler(18.0f, 0.0f, 0.0f);
+        uiItemGo.transform.rotation = Quaternion.Euler(18.0f, transform.rotation.eulerAngles.y, 0.0f);
 
         var uiItem = uiItemGo.GetComponent<UIItemPanel>();
-        uiItem.Item.image.sprite = ResourceManager.GetSprite(item.iconName);
-        uiItem.item = item;
+        uiItem.UpdateItem(item);
 
         return uiItem;
     }
 
-    private IEnumerator MoveObject(ItemView sourceObject, Vector3 targetPosition, Action before = null, Action after = null)
+    private IEnumerator MoveObject(ItemView sourceObject, Vector3 targetLocalPosition, Action before = null, Action after = null)
     {
         if (before != null)
         {
@@ -140,7 +139,7 @@ public class BagRepresentation : MonoBehaviour
         float t = 0.0f;
         float moveDuration = 0.2f;
         Vector3 start = sourceObject.transform.position;
-        Vector3 end = targetPosition;
+        Vector3 end = transform.rotation * targetLocalPosition + transform.position ;
 
         while (t < moveDuration)
         {
@@ -150,7 +149,7 @@ public class BagRepresentation : MonoBehaviour
             yield return null;
         }
 
-        sourceObject.transform.position = targetPosition;
+        sourceObject.transform.position = end;
 
         if (after != null)
         {

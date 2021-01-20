@@ -1,16 +1,12 @@
 ﻿using System.Collections.Generic;
 
 public class InventoryStorage : IInventoryStorage
-{
-    private int id = 0;
-    public int StorageID
-    {
-        get { return id; }
-    }
+{        
+    public int StorageID { get; private set; }    
 
     public InventoryStorage(int storageId)
     {
-        this.id = storageId;
+        StorageID = storageId;
     }
 
     private ItemEvent _onItemAdded = new ItemEvent();
@@ -36,6 +32,7 @@ public class InventoryStorage : IInventoryStorage
 
     public bool AddItem(IItem item)
     {
+        item.SetStorageId(StorageID);
         _items.Add(item);
 
         _onItemAdded.Invoke(item);
@@ -50,9 +47,10 @@ public class InventoryStorage : IInventoryStorage
     public bool RemoveItem(IItem item)
     {
         if (ContainsItem(item))
-        {
-            _items.Remove(item);
+        {            
             _onItemRemoved.Invoke(item);
+            item.SetStorageId(-1);
+            _items.Remove(item);
             return true;
         }
 

@@ -2,15 +2,16 @@
 
 public class UIItemPanel : MonoBehaviour
 {
-    public UIItem Item;
+    [HideInInspector]
+    public UIItem ItemUnderCursor = null;
 
+    public IItem Item { get; private set; }
+
+    [SerializeField]
+    private UIItem uiItem;
     [SerializeField]
     private CanvasGroup canvasGroup = null;
 
-    [HideInInspector]
-    public UIItem itemUnderCursor = null;
-
-    public IItem item;
     private Camera mainCamera;
 
     private void Awake()
@@ -34,19 +35,25 @@ public class UIItemPanel : MonoBehaviour
         canvasGroup.alpha = 0.0f;
     }
 
+    public void UpdateItem(IItem item)
+    {
+        this.Item = item;
+        uiItem.image.sprite = ResourceManager.GetSprite(item.IconName);
+    }
+
     public bool CheckItemUnderCursor(Vector3 mousePosition)
     {
-        itemUnderCursor = null;
+        ItemUnderCursor = null;
 
-        var parallelogram = UIUtils.GetScreenParallelogramFromRect(Item.RectTransform, mainCamera);
-        Item.image.color = Color.white;
+        var parallelogram = UIUtils.GetScreenParallelogramFromRect(uiItem.RectTransform, mainCamera);
+        uiItem.image.color = Color.white;
 
         if (parallelogram.Contains(mousePosition))
         {
-            itemUnderCursor = Item;
-            Item.image.color = Color.red;
+            ItemUnderCursor = uiItem;
+            uiItem.image.color = Color.red;
         }
 
-        return itemUnderCursor != null;
+        return ItemUnderCursor != null;
     }   
 }
