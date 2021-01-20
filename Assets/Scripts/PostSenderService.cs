@@ -34,33 +34,39 @@ public class PostSenderService : MonoBehaviour
 
     private void OnItemAdded(IItem item)
     {
+        var storageId = item.StorageId;
+        var itemId = item.Id;
+
         StartCoroutine(SendPostRequest(
-                storageID: item.StorageId,
-                itemId: item.Id,
+                storageID: storageId,
+                itemId: itemId,
                 operationName: "added",
                 errorCallback: delegate (string msg)
                 {
-                    Debug.LogErrorFormat("Error while add {0} to {1} with message {2}", item.Id, item.StorageId, msg);
+                    Debug.LogErrorFormat("Error while add {0} to {1} with message {2}", itemId, storageId, msg);
                 },
                 successCallback: delegate (string msg)
                 {
-                    Debug.LogFormat("Successfully added {0} to {1} with message {2}", item.Id, item.StorageId, msg);
+                    Debug.LogFormat("Successfully added {0} to {1} with message {2}", itemId, storageId, msg);
                 }));
     }
 
     private void OnItemRemoved(IItem item)
     {
+        var storageId = item.StorageId;
+        var itemId = item.Id;
+        
         StartCoroutine(SendPostRequest(
-                storageID: item.StorageId,
-                itemId: item.Id,
+                storageID: storageId,
+                itemId: itemId,
                 operationName: "removed",
                 errorCallback: delegate (string msg)
                 {
-                    Debug.LogErrorFormat("Error while remove {0} from {1} with message {2}", item.Id, item.StorageId, msg);
+                    Debug.LogErrorFormat("Error while remove {0} from {1} with message {2}", itemId, storageId, msg);
                 },
                 successCallback: delegate (string msg)
                 {
-                    Debug.LogFormat("Successfully removed {0} from {1} with message {2}", item.Id, item.StorageId, msg);
+                    Debug.LogFormat("Successfully removed {0} from {1} with message {2}", itemId, storageId, msg);
                 }));
     }
 
