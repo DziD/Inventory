@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIBag : MonoBehaviour
+public class UIItem : MonoBehaviour
 {
     public PickUpDrop[] Items;
 
@@ -18,12 +18,12 @@ public class UIBag : MonoBehaviour
         canvasGroup.alpha = 0.0f;
     }
 
-    public void OpenBag()
+    public void Show()
     {
         canvasGroup.alpha = 1.0f;
     }
 
-    public void CloseBag()
+    public void Hide()
     {
         canvasGroup.alpha = 0.0f;
     }

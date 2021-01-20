@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class InventoryCrate : MonoBehaviour
 {
     [SerializeField]
-    private UIBag uiBag = null;
+    private List<UIItem> uiItems = new List<UIItem>();
 
     public int CrateID = 0;
 
@@ -19,29 +19,38 @@ public class InventoryCrate : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.GetComponent<DragObject3D>() != null)
+        if (other.gameObject.GetComponent<DragObject3D>() != null)
         {
             other.gameObject.SetActive(false);
-        }        
+        }
     }
 
     private void OnMouseDown()
     {
-        uiBag.OpenBag();        
+        for (int i = 0; i < uiItems.Count; i++)
+        {
+            uiItems[i].Show();
+        }
     }
 
     private void OnMouseUp()
     {
-        if(uiBag.selectedItem != null)
+        for (int i = 0; i < uiItems.Count; i++)
         {
-            uiBag.SpawnSelectedItem();
-        }
+            if (uiItems[i].selectedItem != null)
+            {
+                uiItems[i].SpawnSelectedItem();
+            }
 
-        uiBag.CloseBag();
+            uiItems[i].Hide();
+        }
     }
 
     private void OnMouseDrag()
-    {        
-        uiBag.SelectItem(Input.mousePosition);
+    {
+        for (int i = 0; i < uiItems.Count; i++)
+        {
+            uiItems[i].SelectItem(Input.mousePosition);
+        }
     }
 }
