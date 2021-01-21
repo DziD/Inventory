@@ -104,7 +104,7 @@ public class BagRepresentation : MonoBehaviour
         var itemView = InventorySystem.GetViewForItem(item);
 
         StartCoroutine(MoveObject(itemView,
-            new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), 0.1f, UnityEngine.Random.Range(-0.35f, 0.4f)),
+            new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), 0.1f, UnityEngine.Random.Range(-1.35f, -0.2f)),
             before: () =>
             {
                 itemView.transform.SetParent(Environment.GetItemsRoot());
